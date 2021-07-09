@@ -3,15 +3,20 @@ import openpyxl
 
 
 def open_first_pdf(selected_pdf):
+    """ Function for specific file. Only works properly if format of the file is not changed.
+
+    :param selected_pdf: path to PDF to be parsed
+    :return:
+    """
     pdf = pdfplumber.open(selected_pdf)
     page = pdf.pages[0]
     table = page.extract_table()
     new_table = table[2:]
-
+    formated_table = ["" * 17 for i in range(len(new_table))]
+    positions = [0, 1, 13, 8, 7]
     for i in range(len(new_table)):
         new_table[i][3] = new_table[i][3].replace(',', '.')
         new_table[i][4] = new_table[i][4].replace(',', '.')
-        new_table[i].extend(["", ""])
 
     return new_table
 
@@ -21,7 +26,27 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
                       duzina_vagona=None, tara_vagona=None, neto_vagona=None, rucno_kocena_tezina=None,
                       zracno_kocena_tezina=None, slovna_serija=None, broj_osovina=None, otpremni_kolodvor=None,
                       uputni_kolodvor=None):
+    """ Function for writing final XLSM file.
 
+    :param file_path:
+    :param save_path:
+    :param broj_vagona:
+    :param otpremna_zelj_uprava:
+    :param sifra_otpremnog_kol:
+    :param uputna_zelj_uprava:
+    :param sifra_uputnog_kol:
+    :param okvirni_opis_tereta:
+    :param duzina_vagona:
+    :param tara_vagona:
+    :param neto_vagona:
+    :param rucno_kocena_tezina:
+    :param zracno_kocena_tezina:
+    :param slovna_serija:
+    :param broj_osovina:
+    :param otpremni_kolodvor:
+    :param uputni_kolodvor:
+    :return:
+    """
     workbook = openpyxl.load_workbook(file_path, keep_vba=True)
     worksheet = workbook["Sheet1"]
 
