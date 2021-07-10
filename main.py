@@ -11,6 +11,7 @@ import re
 
 class GUI:
     table = [[""] * 18 for i in range(13)]
+    first_draw = 1
     widths = [30, 100, 60, 60, 60, 60, 70, 70, 70, 70, 60, 60, 60, 70, 50, 80, 80, 60]
     head = ['No.', 'br. vagona', 'otpremna\nželj. upr.', 'šifra\notp. kol.', 'uputna\nželj. upr.', 'šifra\nuput. kol.',
             'okvirni\nopis tereta', 'dužina\nvagona (m)', 'tara\nvagona (t)', 'neto\nvagona (t)', 'ručno\nKM',
@@ -64,26 +65,26 @@ class GUI:
         # Sheet frame
         self.sheet = tksheet.Sheet(self.data_frame, data=self.table, show_row_index=True, show_top_left=False,
                                    column_width=92, empty_vertical=0, empty_horizontal=0, header_height="2")
-        self.sheet.enable_bindings()
+        self.sheet.enable_bindings(bindings='all')
         self.set_widths()
         self.sheet.headers(newheaders=self.head, index=None, reset_col_positions=False, show_headers_if_not_sheet=True)
         self.sheet.pack(fill="both", expand=True, padx=10, pady=(5, 10))
 
         # File picker frame
+        self.smjer_datoteke_rbtn1 = ttk.Radiobutton(self.pick_frame, text="Normalno", variable=self.smjer, value=0)
+        self.smjer_datoteke_rbtn1.grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        self.smjer_datoteke_rbtn2 = ttk.Radiobutton(self.pick_frame, text="Naopako", variable=self.smjer, value=1)
+        self.smjer_datoteke_rbtn2.grid(row=0, column=0, padx=5, pady=5, sticky="e")
+
         self.pick_first_file_btn = ttk.Button(self.pick_frame, text="Odaberi PDF s popisom", width=25,
                                               command=self.pick_first_file_btn_click)
-        self.pick_first_file_btn.grid(row=0, column=0, padx=5, pady=5)
+        self.pick_first_file_btn.grid(row=1, column=0, padx=5, pady=5)
 
         self.first_filepath_label = ttk.Label(self.pick_frame, text="Putanja:")
-        self.first_filepath_label.grid(row=0, column=1, padx=5, pady=5)
+        self.first_filepath_label.grid(row=1, column=1, padx=5, pady=5)
         self.first_filepath_entry = ttk.Entry(self.pick_frame, width=61, textvariable=self.first_file_path)
         self.first_filepath_entry.bind("<Return>", self.enter_path_first_file)
-        self.first_filepath_entry.grid(row=0, column=2, padx=(0, 5), pady=5)
-
-        self.smjer_datoteke_rbtn1 = ttk.Radiobutton(self.pick_frame, text="Normalno", variable=self.smjer, value=0)
-        self.smjer_datoteke_rbtn1.grid(row=1, column=0, padx=5, pady=5, sticky="w")
-        self.smjer_datoteke_rbtn2 = ttk.Radiobutton(self.pick_frame, text="Naopako", variable=self.smjer, value=1)
-        self.smjer_datoteke_rbtn2.grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        self.first_filepath_entry.grid(row=1, column=2, padx=(0, 5), pady=5)
 
         self.pick_excel_org_btn = ttk.Button(self.pick_frame, text="Odaberi EXCEL za najavu", width=25,
                                              command=self.pick_excel_org_btn_click)
@@ -188,9 +189,6 @@ class GUI:
         self.podloga = tk.Frame(self.calc_frame, background="lightgreen")
         self.podloga.grid(row=1, column=6, rowspan=4, columnspan=2, pady=(0, 5), sticky="nsew")
 
-        # self.auto_label = ttk.Label(self.calc_frame, text="AUTOMATSKI", background="lightgreen", style='bold.TLabel')
-        # self.auto_label.grid(row=0, column=6, columnspan=2, padx=5, pady=5)
-
         self.kol_usputne_manip_label = ttk.Label(self.calc_frame, text="Kolodvor usputne manipulacije: 0", background="lightgreen")
         self.kol_usputne_manip_label.grid(row=1, column=6, columnspan=2, padx=5, pady=5)
 
@@ -200,9 +198,20 @@ class GUI:
         self.vrsta_zracne_koc_label = ttk.Label(self.calc_frame, text="Vrsta zračne kočnice: P", background="lightgreen")
         self.vrsta_zracne_koc_label.grid(row=3, column=6, columnspan=2, padx=5, pady=5)
 
+        self.obrisi_sve_btn = ttk.Button(self.calc_frame, text="Izbriši sve", command=self.clear)
+        self.obrisi_sve_btn.grid(row=3, column=8, columnspan=4, padx=5, pady=(0, 5), sticky="nsew")
+
         self.send_btn = ttk.Button(self.calc_frame, text="POŠALJI", command=self.send_data, style="big.TButton")
-        self.send_btn.grid(row=0, column=8, rowspan=4, columnspan=4, padx=5, pady=(0, 5), sticky="nsew")
+        self.send_btn.grid(row=0, column=8, rowspan=3, columnspan=4, padx=5, pady=(0, 5), sticky="nsew")
         self.calc_frame.grid_columnconfigure(8, weight=1)
+
+    def clear(self):
+        empty = [[""] * 18 for i in range(13)]
+        self.sheet.set_sheet_data(empty, reset_col_positions=True, reset_row_positions=True,
+                                  redraw=True, verify=False, reset_highlights=False)
+        self.sheet.align(align="center", redraw=True)
+        self.set_widths()
+        self.first_draw = 1
 
     def pick_first_file_btn_click(self):
         """ Parsing file found via button.
@@ -301,10 +310,21 @@ class GUI:
         :param table: New values to be inserted
         :return: None
         """
-        self.sheet.set_sheet_data(table, reset_col_positions=True, reset_row_positions=True,
-                                  redraw=True, verify=False, reset_highlights=False)
-        self.sheet.align(align="center", redraw=True)
-        self.set_widths()
+        if self.first_draw == 1:
+            self.sheet.set_sheet_data(table, reset_col_positions=True, reset_row_positions=True,
+                                      redraw=True, verify=False, reset_highlights=False)
+            self.sheet.align(align="center", redraw=True)
+            self.set_widths()
+            self.first_draw = 0
+        else:
+            temp = self.sheet.get_sheet_data(return_copy=True, get_header=False, get_index=False)
+            temp.extend(table)
+            self.sheet.set_sheet_data(temp, reset_col_positions=True, reset_row_positions=True,
+                                      redraw=True, verify=False, reset_highlights=False)
+            self.sheet.align(align="center", redraw=True)
+            self.set_widths()
+            self.first_draw = 0
+
 
     def set_widths(self):
         """ Format table to inimize whitespace and keep readability.

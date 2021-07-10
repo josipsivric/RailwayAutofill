@@ -1,3 +1,5 @@
+import pprint
+
 import pdfplumber
 import xlwings as xw
 
@@ -9,8 +11,11 @@ def open_first_pdf(selected_pdf):
     :return:
     """
     pdf = pdfplumber.open(selected_pdf)
-    page = pdf.pages[0]
-    table = page.extract_table()
+    table = []
+
+    for page in pdf.pages:
+        table.extend(page.extract_table())
+
     new_table = table[2:]
     formated_table = [[""] * 18 for i in range(len(new_table))]
     positions = [0, 1, 13, 8, 7, 10, 11, 14, 12]
@@ -22,6 +27,8 @@ def open_first_pdf(selected_pdf):
         for index, pos in enumerate(positions):
             formated_table[i][pos] = new_table[i][index]
 
+    pdf.close_file()
+
     return formated_table
 
 
@@ -32,6 +39,7 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
                       uputni_kolodvor=None, isprava=None):
     """ Function for writing final XLSM file. Keep Excel open.
 
+    :param isprava:
     :param file_path:
     :param save_path:
     :param broj_vagona:
@@ -68,6 +76,6 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
     worksheet.range('AP10').options(transpose=True).value = broj_osovina
     worksheet.range('AR10').options(transpose=True).value = otpremni_kolodvor
     worksheet.range('AT10').options(transpose=True).value = uputni_kolodvor
-    worksheet.range('AY10').options(transpose=True).value = uputni_kolodvor
+    worksheet.range('AY10').options(transpose=True).value = isprava
 
     workbook.save(save_path)
