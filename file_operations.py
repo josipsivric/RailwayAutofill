@@ -12,7 +12,7 @@ def open_first_pdf(selected_pdf):
     page = pdf.pages[0]
     table = page.extract_table()
     new_table = table[2:]
-    formated_table = [[""] * 17 for i in range(len(new_table))]
+    formated_table = [[""] * 18 for i in range(len(new_table))]
     positions = [0, 1, 13, 8, 7, 10, 11, 14, 12]
     for i in range(len(new_table)):
         new_table[i][3] = new_table[i][3].replace(',', '.')
@@ -29,7 +29,7 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
                       uputna_zelj_uprava=None, sifra_uputnog_kol=None, okvirni_opis_tereta=None,
                       duzina_vagona=None, tara_vagona=None, neto_vagona=None, rucno_kocena_tezina=None,
                       zracno_kocena_tezina=None, slovna_serija=None, broj_osovina=None, otpremni_kolodvor=None,
-                      uputni_kolodvor=None):
+                      uputni_kolodvor=None, isprava=None):
     """ Function for writing final XLSM file. Keep Excel open.
 
     :param file_path:
@@ -68,5 +68,6 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
     worksheet.range('AP10').options(transpose=True).value = broj_osovina
     worksheet.range('AR10').options(transpose=True).value = otpremni_kolodvor
     worksheet.range('AT10').options(transpose=True).value = uputni_kolodvor
+    worksheet.range('AY10').options(transpose=True).value = uputni_kolodvor
 
     workbook.save(save_path)

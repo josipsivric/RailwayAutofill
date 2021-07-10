@@ -10,11 +10,11 @@ import re
 
 
 class GUI:
-    table = [[""] * 17 for i in range(13)]
-    widths = [30, 95, 60, 60, 60, 60, 70, 70, 70, 70, 60, 60, 60, 70, 50, 80, 80]
+    table = [[""] * 18 for i in range(13)]
+    widths = [30, 100, 60, 60, 60, 60, 70, 70, 70, 70, 60, 60, 60, 70, 50, 80, 80, 60]
     head = ['No.', 'br. vagona', 'otpremna\nželj. upr.', 'šifra\notp. kol.', 'uputna\nželj. upr.', 'šifra\nuput. kol.',
             'okvirni\nopis tereta', 'dužina\nvagona (m)', 'tara\nvagona (t)', 'neto\nvagona (t)', 'ručno\nKM',
-            'pun\nKM', 'prazan\nKM', 'serija', 'broj\nosovina', 'otpremni\nkolodvor', 'uputni\nkolodvor']
+            'pun\nKM', 'prazan\nKM', 'serija', 'broj\nosovina', 'otpremni\nkolodvor', 'uputni\nkolodvor', 'isprava']
 
     def __init__(self, master):
         self.master = master
@@ -24,6 +24,7 @@ class GUI:
         self.style.configure('bold.TLabel', font=(None, 12, 'bold'))
 
         self.first_file_path = tk.StringVar()
+        self.smjer = tk.IntVar()
         self.org_excel_file_path = tk.StringVar()
         self.new_excel_file_path = tk.StringVar()
 
@@ -38,6 +39,7 @@ class GUI:
         self.okvirni_opis_tereta = tk.StringVar()
         self.otpremni_kol = tk.StringVar()
         self.uputni_kol = tk.StringVar()
+        self.isprava = tk.StringVar()
         self.kocna_masa_var = tk.IntVar()
 
         self.kol_usputne_manip = tk.StringVar()
@@ -74,23 +76,28 @@ class GUI:
 
         self.first_filepath_label = ttk.Label(self.pick_frame, text="Putanja:")
         self.first_filepath_label.grid(row=0, column=1, padx=5, pady=5)
-        self.first_filepath_entry = ttk.Entry(self.pick_frame, width=56, textvariable=self.first_file_path)
+        self.first_filepath_entry = ttk.Entry(self.pick_frame, width=61, textvariable=self.first_file_path)
         self.first_filepath_entry.bind("<Return>", self.enter_path_first_file)
         self.first_filepath_entry.grid(row=0, column=2, padx=(0, 5), pady=5)
 
+        self.smjer_datoteke_rbtn1 = ttk.Radiobutton(self.pick_frame, text="Normalno", variable=self.smjer, value=0)
+        self.smjer_datoteke_rbtn1.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.smjer_datoteke_rbtn2 = ttk.Radiobutton(self.pick_frame, text="Naopako", variable=self.smjer, value=1)
+        self.smjer_datoteke_rbtn2.grid(row=1, column=0, padx=5, pady=5, sticky="e")
+
         self.pick_excel_org_btn = ttk.Button(self.pick_frame, text="Odaberi EXCEL za najavu", width=25,
                                              command=self.pick_excel_org_btn_click)
-        self.pick_excel_org_btn.grid(row=0, column=3, padx=(35, 5), pady=5)
+        self.pick_excel_org_btn.grid(row=0, column=3, padx=(42, 5), pady=5)
 
         self.org_excel_file_path_label = ttk.Label(self.pick_frame, text="Putanja:")
         self.org_excel_file_path_label.grid(row=0, column=4, padx=5, pady=5)
-        self.org_excel_file_path_entry = ttk.Entry(self.pick_frame, width=56, textvariable=self.org_excel_file_path)
+        self.org_excel_file_path_entry = ttk.Entry(self.pick_frame, width=61, textvariable=self.org_excel_file_path)
         self.org_excel_file_path_entry.bind("<Return>", self.enter_path_org_excel_file)
         self.org_excel_file_path_entry.grid(row=0, column=5, padx=(0, 5), pady=5)
 
         self.new_excel_file_path_label = ttk.Label(self.pick_frame, text="Putanja do nove generirane datoteke:")
         self.new_excel_file_path_label.grid(row=1, column=3, columnspan=2, padx=(15, 5), pady=5, sticky="e")
-        self.new_excel_file_path_entry = ttk.Entry(self.pick_frame, width=56, textvariable=self.new_excel_file_path)
+        self.new_excel_file_path_entry = ttk.Entry(self.pick_frame, width=61, textvariable=self.new_excel_file_path)
         self.new_excel_file_path_entry.grid(row=1, column=5, padx=(0, 5), pady=5)
 
         # Calculation frame
@@ -164,33 +171,34 @@ class GUI:
         self.uputni_kol_entry.bind('<Return>', lambda x: self.evaluate(16, self.uputni_kol.get()))
         self.uputni_kol_entry.grid(row=2, column=5, padx=5, pady=5)
 
+        self.isprava_label = ttk.Label(self.calc_frame, text="Isprava:")
+        self.isprava_label.grid(row=3, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.isprava_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.isprava)
+        self.isprava_entry.bind('<FocusOut>', lambda x: self.evaluate(17, self.isprava.get()))
+        self.isprava_entry.bind('<Return>', lambda x: self.evaluate(17, self.isprava.get()))
+        self.isprava_entry.grid(row=3, column=5, padx=5, pady=5)
+
         self.zracno_kocna_label = ttk.Label(self.calc_frame, text="Kočna masa:")
-        self.zracno_kocna_label.grid(row=3, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.zracno_kocna_label.grid(row=0, column=6, padx=(5, 60), pady=5, sticky="w")
         self.zracno_kocna_rbtn1 = ttk.Radiobutton(self.calc_frame, text="Pun", variable=self.kocna_masa_var, value=0)
-        self.zracno_kocna_rbtn1.grid(row=3, column=5, padx=5, pady=5, sticky="w")
+        self.zracno_kocna_rbtn1.grid(row=0, column=6, padx=5, pady=5, sticky="e")
         self.zracno_kocna_rbtn2 = ttk.Radiobutton(self.calc_frame, text="Prazan", variable=self.kocna_masa_var, value=1)
-        self.zracno_kocna_rbtn2.grid(row=3, column=5, padx=5, pady=5, sticky="e")
+        self.zracno_kocna_rbtn2.grid(row=0, column=7, padx=5, pady=5, sticky="w")
 
         self.podloga = tk.Frame(self.calc_frame, background="lightgreen")
-        self.podloga.grid(row=0, column=6, rowspan=4, columnspan=2, pady=(0, 5), sticky="nsew")
+        self.podloga.grid(row=1, column=6, rowspan=4, columnspan=2, pady=(0, 5), sticky="nsew")
 
-        self.auto_label = ttk.Label(self.calc_frame, text="AUTOMATSKI", background="lightgreen", style='bold.TLabel')
-        self.auto_label.grid(row=0, column=6, columnspan=2, padx=5, pady=5)
+        # self.auto_label = ttk.Label(self.calc_frame, text="AUTOMATSKI", background="lightgreen", style='bold.TLabel')
+        # self.auto_label.grid(row=0, column=6, columnspan=2, padx=5, pady=5)
 
-        self.kol_usputne_manip_label = ttk.Label(self.calc_frame, text="Kolodvor usp. manip.:", background="lightgreen")
-        self.kol_usputne_manip_label.grid(row=1, column=6, padx=(5, 0), pady=5, sticky="e")
-        self.kol_usputne_manip_entry = ttk.Entry(self.calc_frame, width=4, textvariable=self.kol_usputne_manip)
-        self.kol_usputne_manip_entry.grid(row=1, column=7, padx=5, pady=5)
+        self.kol_usputne_manip_label = ttk.Label(self.calc_frame, text="Kolodvor usputne manipulacije: 0", background="lightgreen")
+        self.kol_usputne_manip_label.grid(row=1, column=6, columnspan=2, padx=5, pady=5)
 
-        self.sif_usputne_manip_label = ttk.Label(self.calc_frame, text="Šifra usp. manip.:", background="lightgreen")
-        self.sif_usputne_manip_label.grid(row=2, column=6, padx=(5, 0), pady=5, sticky="e")
-        self.sif_usputne_manip_entry = ttk.Entry(self.calc_frame, width=4, textvariable=self.sif_usputne_manip)
-        self.sif_usputne_manip_entry.grid(row=2, column=7, padx=5, pady=5)
+        self.sif_usputne_manip_label = ttk.Label(self.calc_frame, text="Šifra usputne manipulacije: 0", background="lightgreen")
+        self.sif_usputne_manip_label.grid(row=2, column=6, columnspan=2, padx=5, pady=5)
 
-        self.vrsta_zracne_koc_label = ttk.Label(self.calc_frame, text="Vrsta zračne kočnice:", background="lightgreen")
-        self.vrsta_zracne_koc_label.grid(row=3, column=6, padx=(5, 0), pady=5, sticky="e")
-        self.vrsta_zracne_koc_entry = ttk.Entry(self.calc_frame, width=4, textvariable=self.vrsta_zracne_kocnice)
-        self.vrsta_zracne_koc_entry.grid(row=3, column=7, padx=5, pady=5)
+        self.vrsta_zracne_koc_label = ttk.Label(self.calc_frame, text="Vrsta zračne kočnice: P", background="lightgreen")
+        self.vrsta_zracne_koc_label.grid(row=3, column=6, columnspan=2, padx=5, pady=5)
 
         self.send_btn = ttk.Button(self.calc_frame, text="POŠALJI", command=self.send_data, style="big.TButton")
         self.send_btn.grid(row=0, column=8, rowspan=4, columnspan=4, padx=5, pady=(0, 5), sticky="nsew")
@@ -205,6 +213,10 @@ class GUI:
         if path != '':
             self.first_file_path.set(path)
             self.table = file_operations.open_first_pdf(self.first_file_path.get())
+        if self.smjer.get() == 0:
+            self.full_redraw_sheet(self.table)
+        else:
+            self.table.reverse()
             self.full_redraw_sheet(self.table)
 
     def enter_path_first_file(self, event):
@@ -215,7 +227,11 @@ class GUI:
         """
         if os.path.isfile(self.first_file_path.get()):
             self.table = file_operations.open_first_pdf(self.first_file_path.get())
-            self.full_redraw_sheet(self.table)
+            if self.smjer.get() == 0:
+                self.full_redraw_sheet(self.table)
+            else:
+                self.table.reverse()
+                self.full_redraw_sheet(self.table)
         else:
             self.first_file_path.set("Molim unesite putanju do ispravne datoteke!")
 
@@ -331,10 +347,13 @@ class GUI:
         for i in range(len(elements)):
             elements[i].replace(',', '.')
         for el in elements:
-            try:
-                total = total + float(el)
-            except ValueError:
-                return "Greška!"
+            if el == '' or el == 'praznina':
+                continue
+            else:
+                try:
+                    total = total + float(el)
+                except ValueError:
+                    return "Greška!"
         return total
 
     def send_data(self):
@@ -353,19 +372,42 @@ class GUI:
             else:
                 slovna_serija.append('')
 
+        stupac_isprava = self.sheet.get_column_data(17)
+        isprava = []
+        for i in range(len(stupac_isprava)):
+            if stupac_isprava[i] != '':
+                isprava.append('\'' + stupac_isprava[i])
+            else:
+                isprava.append('praznina')
+
+        stupac_neto = self.sheet.get_column_data(9)
+        neto = []
+        for i in range(len(stupac_neto)):
+            if stupac_neto[i] == '':
+                neto.append('praznina')
+            else:
+                neto.append(stupac_neto[i])
+
+        stupac_okvirni = self.sheet.get_column_data(6)
+        okvirni_opis = []
+        for i in range(len(stupac_okvirni)):
+            if stupac_okvirni[i] == '':
+                okvirni_opis.append('praznina')
+            else:
+                okvirni_opis.append(stupac_okvirni[i])
+
         file_operations.write_final_excel(self.org_excel_file_path.get(), self.new_excel_file_path.get(),
                                           self.sheet.get_column_data(1), self.sheet.get_column_data(2),
                                           self.sheet.get_column_data(3), self.sheet.get_column_data(4),
-                                          self.sheet.get_column_data(5), self.sheet.get_column_data(6),
-                                          self.sheet.get_column_data(7), self.sheet.get_column_data(8),
-                                          self.sheet.get_column_data(9), self.sheet.get_column_data(10),
+                                          self.sheet.get_column_data(5), okvirni_opis, self.sheet.get_column_data(7),
+                                          self.sheet.get_column_data(8), neto, self.sheet.get_column_data(10),
                                           pun_prazan, slovna_serija, self.sheet.get_column_data(14),
-                                          self.sheet.get_column_data(15), self.sheet.get_column_data(16))
+                                          self.sheet.get_column_data(15), self.sheet.get_column_data(16), isprava)
 
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("1205x635")
-    root.minsize(1205, 635)
+    root.geometry("1270x635")
+    root.minsize(1270, 635)
     gui = GUI(root)
     root.mainloop()
