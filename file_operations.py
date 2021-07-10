@@ -1,5 +1,6 @@
 import pdfplumber
 import openpyxl
+import xlwings as xw
 
 
 def open_first_pdf(selected_pdf):
@@ -12,13 +13,17 @@ def open_first_pdf(selected_pdf):
     page = pdf.pages[0]
     table = page.extract_table()
     new_table = table[2:]
-    formated_table = ["" * 17 for i in range(len(new_table))]
-    positions = [0, 1, 13, 8, 7]
+    formated_table = [[""] * 17 for i in range(len(new_table))]
+    positions = [0, 1, 13, 8, 7, 10, 11, 14, 12]
     for i in range(len(new_table)):
         new_table[i][3] = new_table[i][3].replace(',', '.')
         new_table[i][4] = new_table[i][4].replace(',', '.')
 
-    return new_table
+    for i in range(len(new_table)):
+        for index, pos in enumerate(positions):
+            formated_table[i][pos] = new_table[i][index]
+
+    return formated_table
 
 
 def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_uprava=None, sifra_otpremnog_kol=None,
@@ -47,67 +52,22 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
     :param uputni_kolodvor:
     :return:
     """
-    workbook = openpyxl.load_workbook(file_path, keep_vba=True)
-    worksheet = workbook["Sheet1"]
-
-    if broj_vagona is not None:
-        for i in range(len(broj_vagona)):
-            worksheet.cell(row=10+i, column=8, value=broj_vagona[i])
-
-    if otpremna_zelj_uprava is not None:
-        for i in range(len(otpremna_zelj_uprava)):
-            worksheet.cell(row=10+i, column=10, value=otpremna_zelj_uprava[i])
-
-    if sifra_otpremnog_kol is not None:
-        for i in range(len(sifra_otpremnog_kol)):
-            worksheet.cell(row=10+i, column=12, value=sifra_otpremnog_kol[i])
-
-    if uputna_zelj_uprava is not None:
-        for i in range(len(uputna_zelj_uprava)):
-            worksheet.cell(row=10+i, column=14, value=uputna_zelj_uprava[i])
-
-    if sifra_uputnog_kol is not None:
-        for i in range(len(sifra_uputnog_kol)):
-            worksheet.cell(row=10 + i, column=16, value=sifra_uputnog_kol[i])
-
-    if okvirni_opis_tereta is not None:
-        for i in range(len(okvirni_opis_tereta)):
-            worksheet.cell(row=10 + i, column=22, value=okvirni_opis_tereta[i])
-
-    if duzina_vagona is not None:
-        for i in range(len(duzina_vagona)):
-            worksheet.cell(row=10 + i, column=24, value=duzina_vagona[i])
-
-    if tara_vagona is not None:
-        for i in range(len(tara_vagona)):
-            worksheet.cell(row=10 + i, column=26, value=tara_vagona[i])
-
-    if neto_vagona is not None:
-        for i in range(len(neto_vagona)):
-            worksheet.cell(row=10 + i, column=28, value=neto_vagona[i])
-
-    if rucno_kocena_tezina is not None:
-        for i in range(len(rucno_kocena_tezina)):
-            worksheet.cell(row=10 + i, column=30, value=rucno_kocena_tezina[i])
-
-    if zracno_kocena_tezina is not None:
-        for i in range(len(zracno_kocena_tezina)):
-            worksheet.cell(row=10 + i, column=34, value=zracno_kocena_tezina[i])
-
-    if slovna_serija is not None:
-        for i in range(len(slovna_serija)):
-            worksheet.cell(row=10 + i, column=38, value=slovna_serija[i])
-
-    if broj_osovina is not None:
-        for i in range(len(broj_osovina)):
-            worksheet.cell(row=10 + i, column=40, value=broj_osovina[i])
-
-    if otpremni_kolodvor is not None:
-        for i in range(len(otpremni_kolodvor)):
-            worksheet.cell(row=10 + i, column=42, value=otpremni_kolodvor[i])
-
-    if uputni_kolodvor is not None:
-        for i in range(len(uputni_kolodvor)):
-            worksheet.cell(row=10 + i, column=44, value=uputni_kolodvor[i])
+    workbook = xw.Book(file_path)
+    worksheet = workbook.sheets["Sheet1"]
+    worksheet.range('H10').options(transpose=True).value = broj_vagona
+    worksheet.range('J10').options(transpose=True).value = otpremna_zelj_uprava
+    worksheet.range('L10').options(transpose=True).value = sifra_otpremnog_kol
+    worksheet.range('N10').options(transpose=True).value = uputna_zelj_uprava
+    worksheet.range('P10').options(transpose=True).value = sifra_uputnog_kol
+    worksheet.range('V10').options(transpose=True).value = okvirni_opis_tereta
+    worksheet.range('X10').options(transpose=True).value = duzina_vagona
+    worksheet.range('Z10').options(transpose=True).value = tara_vagona
+    worksheet.range('AB10').options(transpose=True).value = neto_vagona
+    worksheet.range('AD10').options(transpose=True).value = rucno_kocena_tezina
+    worksheet.range('AH10').options(transpose=True).value = zracno_kocena_tezina
+    worksheet.range('AL10').options(transpose=True).value = slovna_serija
+    worksheet.range('AP10').options(transpose=True).value = broj_osovina
+    worksheet.range('AR10').options(transpose=True).value = otpremni_kolodvor
+    worksheet.range('AT10').options(transpose=True).value = uputni_kolodvor
 
     workbook.save(save_path)
