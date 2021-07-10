@@ -1,5 +1,4 @@
 import pdfplumber
-import openpyxl
 import xlwings as xw
 
 
