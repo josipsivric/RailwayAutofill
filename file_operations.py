@@ -30,7 +30,7 @@ def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_upra
                       duzina_vagona=None, tara_vagona=None, neto_vagona=None, rucno_kocena_tezina=None,
                       zracno_kocena_tezina=None, slovna_serija=None, broj_osovina=None, otpremni_kolodvor=None,
                       uputni_kolodvor=None):
-    """ Function for writing final XLSM file.
+    """ Function for writing final XLSM file. Keep Excel open.
 
     :param file_path:
     :param save_path:
