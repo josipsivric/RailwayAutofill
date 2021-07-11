@@ -22,7 +22,9 @@ class GUI:
 
     def __init__(self, master):
         self.master = master
-        master.title("Obrada")
+        master.title("Priprema za najavu")
+        master.iconbitmap("train.ico")
+
         self.style = ttk.Style()
         self.style.configure('big.TButton', font=(None, 12, 'bold'), foreground="red")
         self.style.configure('bold.TLabel', font=(None, 12, 'bold'))
@@ -237,6 +239,10 @@ class GUI:
         self.calc_frame.grid_columnconfigure(8, weight=1)
 
     def clear(self):
+        """ Delete all data.
+
+        :return:
+        """
         empty = [[""] * 18 for _ in range(1)]
         self.first_file_path.set("")
         self.smjer.set(0)
