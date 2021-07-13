@@ -1,4 +1,9 @@
-import pprint
+""" Code for operating PDF and Excel files."""
+
+__author__ = "Josip Sivrić"
+__version__ = "1.0"
+__email__ = "josipsivric@gmail.com"
+__status__ = "Production"
 
 import pdfplumber
 import xlwings as xw

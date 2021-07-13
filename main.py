@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+
+""" Program for automating and simplifying some work for my dad. """
+
+__author__ = "Josip Sivrić"
+__version__ = "1.0"
+__email__ = "josipsivric@gmail.com"
+__status__ = "Production"
+
 import decimal
 import os.path
 import re
