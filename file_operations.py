@@ -19,7 +19,9 @@ def open_first_pdf(selected_pdf):
     table = []
 
     for page in pdf.pages:
-        table.extend(page.extract_table())
+        extract = page.extract_table()
+        if extract is not None:
+            table.extend(extract)
 
     new_table = table[2:]
     formated_table = [[""] * 18 for i in range(len(new_table))]
