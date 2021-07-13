@@ -1,7 +1,7 @@
 """ Code for operating PDF and Excel files."""
 
 __author__ = "Josip Sivrić"
-__version__ = "1.0.1"
+__version__ = "1.1"
 __email__ = "josipsivric@gmail.com"
 __status__ = "Production"
 
