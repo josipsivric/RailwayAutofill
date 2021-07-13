@@ -39,9 +39,8 @@ class GUI:
         self.neto_entry = tk.StringVar()
         self.os_entry = tk.StringVar()
         self.ukduzina_entry = tk.StringVar()
-        self.punkm_entry = tk.StringVar()
-        self.prazankm_entry = tk.StringVar()
         self.rkm_entry = tk.StringVar()
+        self.ukkm_entry = tk.StringVar()
 
         self.otpremna_zelj_uprava = tk.StringVar()
         self.sifra_otpremnog_kol = tk.StringVar()
@@ -108,115 +107,107 @@ class GUI:
         self.new_excel_file_path_entry.grid(row=1, column=5, padx=(0, 5), pady=5)
 
         # Calculation frame
-        self.podloga1 = tk.Frame(self.calc_frame, background="lightgreen")
-        self.podloga1.grid(row=0, column=0, rowspan=4, columnspan=4, sticky="nsew")
-
-        self.tare_label = ttk.Label(self.calc_frame, text="Tara težina (tone):", background="lightgreen")
-        self.tare_label.grid(row=0, column=0, padx=5, pady=5, sticky="e")
-        self.tare_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.tare_entry)
-        self.tare_calc.grid(row=0, column=1, pady=5, padx=5)
-
-        self.neto_label = ttk.Label(self.calc_frame, text="Neto težina (tone):", background="lightgreen")
-        self.neto_label.grid(row=1, column=0, padx=5, pady=5, sticky="e")
-        self.neto_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.neto_entry)
-        self.neto_calc.grid(row=1, column=1, pady=5, padx=5)
-
-        self.bruto_label = ttk.Label(self.calc_frame, text="Bruto težina (tone):", background="lightgreen")
-        self.bruto_label.grid(row=2, column=0, padx=5, pady=5, sticky="e")
-        self.bruto_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.bruto_entry)
-        self.bruto_calc.grid(row=2, column=1, pady=5, padx=5)
-
-        self.os_label = ttk.Label(self.calc_frame, text="Broj osovina:", background="lightgreen")
-        self.os_label.grid(row=3, column=0, padx=5, pady=5, sticky="e")
-        self.os_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.os_entry)
-        self.os_calc.grid(row=3, column=1, pady=5, padx=5)
-
-        self.rkm_label = ttk.Label(self.calc_frame, text="Ručna KM:", background="lightgreen")
-        self.rkm_label.grid(row=0, column=2, padx=5, pady=5, sticky="e")
-        self.rkm_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.rkm_entry)
-        self.rkm_calc.grid(row=0, column=3, pady=5, padx=5)
-
-        self.prazankm_label = ttk.Label(self.calc_frame, text="Prazan KM:", background="lightgreen")
-        self.prazankm_label.grid(row=1, column=2, padx=5, pady=5, sticky="e")
-        self.prazankm_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.prazankm_entry)
-        self.prazankm_calc.grid(row=1, column=3, pady=5, padx=5)
-
-        self.punkm_label = ttk.Label(self.calc_frame, text="Pun KM:", background="lightgreen")
-        self.punkm_label.grid(row=2, column=2, padx=5, pady=5, sticky="e")
-        self.punkm_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.punkm_entry)
-        self.punkm_calc.grid(row=2, column=3, pady=5, padx=5)
-
-        self.ukduzina_label = ttk.Label(self.calc_frame, text="Ukupna dužina:", background="lightgreen")
-        self.ukduzina_label.grid(row=3, column=2, padx=5, pady=5, sticky="e")
-        self.ukduzina_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.ukduzina_entry)
-        self.ukduzina_calc.grid(row=3, column=3, pady=5, padx=5)
-
-        self.calc_btn = ttk.Button(self.calc_frame, text="Izračunaj i pripremi", command=self.calculate_weights_btn)
-        self.calc_btn.grid(row=4, column=0, columnspan=4, pady=5, sticky="nsew")
-
         self.otpremna_zelj_uprava_label = ttk.Label(self.calc_frame, text="Otpremna željeznička uprava:")
-        self.otpremna_zelj_uprava_label.grid(row=0, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.otpremna_zelj_uprava_label.grid(row=0, column=0, padx=(5, 0), pady=5, sticky="e")
         self.otpremna_zelj_uprava_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.otpremna_zelj_uprava)
         self.otpremna_zelj_uprava_entry.bind('<FocusOut>', lambda x: self.evaluate(2, self.otpremna_zelj_uprava.get()))
         self.otpremna_zelj_uprava_entry.bind('<Return>', lambda x: self.evaluate(2, self.otpremna_zelj_uprava.get()))
-        self.otpremna_zelj_uprava_entry.grid(row=0, column=5, padx=5, pady=5)
+        self.otpremna_zelj_uprava_entry.grid(row=0, column=1, padx=5, pady=5)
 
         self.sifra_otpremnog_kol_label = ttk.Label(self.calc_frame, text="Šifra otpremnog kolodvora:")
-        self.sifra_otpremnog_kol_label.grid(row=1, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.sifra_otpremnog_kol_label.grid(row=1, column=0, padx=(5, 0), pady=5, sticky="e")
         self.sifra_otpremnog_kol_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.sifra_otpremnog_kol)
         self.sifra_otpremnog_kol_entry.bind('<FocusOut>', lambda x: self.evaluate(3, self.sifra_otpremnog_kol.get()))
         self.sifra_otpremnog_kol_entry.bind('<Return>', lambda x: self.evaluate(3, self.sifra_otpremnog_kol.get()))
-        self.sifra_otpremnog_kol_entry.grid(row=1, column=5, padx=5, pady=5)
+        self.sifra_otpremnog_kol_entry.grid(row=1, column=1, padx=5, pady=5)
 
         self.uputna_zelj_uprava_label = ttk.Label(self.calc_frame, text="Uputna željeznička uprava:")
-        self.uputna_zelj_uprava_label.grid(row=2, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.uputna_zelj_uprava_label.grid(row=2, column=0, padx=(5, 0), pady=5, sticky="e")
         self.uputna_zelj_uprava_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.uputna_zelj_uprava)
         self.uputna_zelj_uprava_entry.bind('<FocusOut>', lambda x: self.evaluate(4, self.uputna_zelj_uprava.get()))
         self.uputna_zelj_uprava_entry.bind('<Return>', lambda x: self.evaluate(4, self.uputna_zelj_uprava.get()))
-        self.uputna_zelj_uprava_entry.grid(row=2, column=5, padx=5, pady=5)
+        self.uputna_zelj_uprava_entry.grid(row=2, column=1, padx=5, pady=5)
 
         self.sifra_uputnog_kol_label = ttk.Label(self.calc_frame, text="Šifra uputnog kolodvora:")
-        self.sifra_uputnog_kol_label.grid(row=3, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.sifra_uputnog_kol_label.grid(row=3, column=0, padx=(5, 0), pady=5, sticky="e")
         self.sifra_uputnog_kol_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.sifra_uputnog_kol)
         self.sifra_uputnog_kol_entry.bind('<FocusOut>', lambda x: self.evaluate(5, self.sifra_uputnog_kol.get()))
         self.sifra_uputnog_kol_entry.bind('<Return>', lambda x: self.evaluate(5, self.sifra_uputnog_kol.get()))
-        self.sifra_uputnog_kol_entry.grid(row=3, column=5, padx=5, pady=5)
+        self.sifra_uputnog_kol_entry.grid(row=3, column=1, padx=5, pady=5)
 
         self.okvirni_opis_tereta_label = ttk.Label(self.calc_frame, text="Okvirni opis tereta:")
-        self.okvirni_opis_tereta_label.grid(row=4, column=4, padx=(5, 0), pady=5, sticky="e")
+        self.okvirni_opis_tereta_label.grid(row=4, column=0, padx=(5, 0), pady=5, sticky="e")
         self.okvirni_opis_tereta_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.okvirni_opis_tereta)
         self.okvirni_opis_tereta_entry.bind('<FocusOut>', lambda x: self.evaluate(6, self.okvirni_opis_tereta.get()))
         self.okvirni_opis_tereta_entry.bind('<Return>', lambda x: self.evaluate(6, self.okvirni_opis_tereta.get()))
-        self.okvirni_opis_tereta_entry.grid(row=4, column=5, padx=5, pady=5)
+        self.okvirni_opis_tereta_entry.grid(row=4, column=1, padx=5, pady=5)
 
         self.otpremni_kol_label = ttk.Label(self.calc_frame, text="Otpremni kolodvor:")
-        self.otpremni_kol_label.grid(row=0, column=6, padx=(5, 0), pady=5, sticky="e")
+        self.otpremni_kol_label.grid(row=0, column=2, padx=(5, 0), pady=5, sticky="e")
         self.otpremni_kol_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.otpremni_kol)
         self.otpremni_kol_entry.bind('<FocusOut>', lambda x: self.evaluate(15, self.otpremni_kol.get()))
         self.otpremni_kol_entry.bind('<Return>', lambda x: self.evaluate(15, self.otpremni_kol.get()))
-        self.otpremni_kol_entry.grid(row=0, column=7, padx=5, pady=5)
+        self.otpremni_kol_entry.grid(row=0, column=3, padx=5, pady=5)
 
         self.uputni_kol_label = ttk.Label(self.calc_frame, text="Uputni kolodvor:")
-        self.uputni_kol_label.grid(row=1, column=6, padx=(5, 0), pady=5, sticky="e")
+        self.uputni_kol_label.grid(row=1, column=2, padx=(5, 0), pady=5, sticky="e")
         self.uputni_kol_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.uputni_kol)
         self.uputni_kol_entry.bind('<FocusOut>', lambda x: self.evaluate(16, self.uputni_kol.get()))
         self.uputni_kol_entry.bind('<Return>', lambda x: self.evaluate(16, self.uputni_kol.get()))
-        self.uputni_kol_entry.grid(row=1, column=7, padx=5, pady=5)
+        self.uputni_kol_entry.grid(row=1, column=3, padx=5, pady=5)
 
         self.isprava_label = ttk.Label(self.calc_frame, text="Isprava:")
-        self.isprava_label.grid(row=2, column=6, padx=(5, 0), pady=5, sticky="e")
+        self.isprava_label.grid(row=2, column=2, padx=(5, 0), pady=5, sticky="e")
         self.isprava_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.isprava)
         self.isprava_entry.bind('<FocusOut>', lambda x: self.evaluate(17, self.isprava.get()))
         self.isprava_entry.bind('<Return>', lambda x: self.evaluate(17, self.isprava.get()))
-        self.isprava_entry.grid(row=2, column=7, padx=5, pady=5)
+        self.isprava_entry.grid(row=2, column=3, padx=5, pady=5)
 
         self.kocna_masa_pun_label = ttk.Label(self.calc_frame, text="Broj punih vagona:")
-        self.kocna_masa_pun_label.grid(row=3, column=6, padx=(5, 0), pady=5, sticky="e")
+        self.kocna_masa_pun_label.grid(row=3, column=2, padx=(5, 0), pady=5, sticky="e")
         self.kocna_masa_pun_entry = ttk.Entry(self.calc_frame, width=20, textvariable=self.kocna_masa_pun_broj)
-        self.kocna_masa_pun_entry.grid(row=3, column=7, padx=5, pady=5)
+        self.kocna_masa_pun_entry.grid(row=3, column=3, padx=5, pady=5)
 
         self.podloga = tk.Frame(self.calc_frame, background="lightgreen")
-        self.podloga.grid(row=0, column=8, rowspan=4, columnspan=2, pady=(0, 5), sticky="nsew")
+        self.podloga.grid(row=0, column=4, rowspan=4, columnspan=6, sticky="nsew")
+
+        self.tare_label = ttk.Label(self.calc_frame, text="Tara težina (tone):", background="lightgreen")
+        self.tare_label.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        self.tare_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.tare_entry)
+        self.tare_calc.grid(row=0, column=5, pady=5, padx=5)
+
+        self.neto_label = ttk.Label(self.calc_frame, text="Neto težina (tone):", background="lightgreen")
+        self.neto_label.grid(row=1, column=4, padx=5, pady=5, sticky="e")
+        self.neto_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.neto_entry)
+        self.neto_calc.grid(row=1, column=5, pady=5, padx=5)
+
+        self.bruto_label = ttk.Label(self.calc_frame, text="Bruto težina (tone):", background="lightgreen")
+        self.bruto_label.grid(row=2, column=4, padx=5, pady=5, sticky="e")
+        self.bruto_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.bruto_entry)
+        self.bruto_calc.grid(row=2, column=5, pady=5, padx=5)
+
+        self.os_label = ttk.Label(self.calc_frame, text="Broj osovina:", background="lightgreen")
+        self.os_label.grid(row=3, column=4, padx=5, pady=5, sticky="e")
+        self.os_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.os_entry)
+        self.os_calc.grid(row=3, column=5, pady=5, padx=5)
+
+        self.rkm_label = ttk.Label(self.calc_frame, text="Ručna KM:", background="lightgreen")
+        self.rkm_label.grid(row=0, column=6, padx=5, pady=5, sticky="e")
+        self.rkm_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.rkm_entry)
+        self.rkm_calc.grid(row=0, column=7, pady=5, padx=5)
+
+        self.ukkm_label = ttk.Label(self.calc_frame, text="Ukupna KM:", background="lightgreen")
+        self.ukkm_label.grid(row=1, column=6, padx=5, pady=5, sticky="e")
+        self.ukkm_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.ukkm_entry)
+        self.ukkm_calc.grid(row=1, column=7, pady=5, padx=5)
+
+        self.ukduzina_label = ttk.Label(self.calc_frame, text="Ukupna dužina:", background="lightgreen")
+        self.ukduzina_label.grid(row=2, column=6, padx=5, pady=5, sticky="e")
+        self.ukduzina_calc = ttk.Entry(self.calc_frame, width=15, textvariable=self.ukduzina_entry)
+        self.ukduzina_calc.grid(row=2, column=7, pady=5, padx=5)
+
+        self.calc_btn = ttk.Button(self.calc_frame, text="Izračunaj i pripremi", command=self.calculate_weights_btn)
+        self.calc_btn.grid(row=4, column=4, columnspan=4, pady=5, padx=5, sticky="nsew")
 
         self.auto_label = ttk.Label(self.calc_frame, text="AUTOMATSKI", background="lightgreen", style="bold.TLabel")
         self.auto_label.grid(row=0, column=8, columnspan=2, padx=5, pady=5)
@@ -234,7 +225,7 @@ class GUI:
         self.vrsta_zracne_koc_label.grid(row=3, column=8, columnspan=2, padx=5, pady=5)
 
         self.send_btn = ttk.Button(self.calc_frame, text="POŠALJI", command=self.send_data, style="big.TButton")
-        self.send_btn.grid(row=4, column=8, columnspan=2, pady=(0, 5), sticky="nsew")
+        self.send_btn.grid(row=4, column=8, columnspan=2, padx=5, pady=5, sticky="nsew")
 
         self.calc_frame.grid_columnconfigure(8, weight=1)
 
@@ -254,9 +245,8 @@ class GUI:
         self.neto_entry.set("")
         self.os_entry.set("")
         self.ukduzina_entry.set("")
-        self.punkm_entry.set("")
-        self.prazankm_entry.set("")
         self.rkm_entry.set("")
+        self.ukkm_entry.set("")
 
         self.otpremna_zelj_uprava.set("")
         self.sifra_otpremnog_kol.set("")
@@ -389,7 +379,10 @@ class GUI:
         kocne_mase = []
 
         try:
-            broj = int(self.kocna_masa_pun_broj.get())
+            if self.kocna_masa_pun_broj.get() == '':
+                broj = 0
+            else:
+                broj = int(self.kocna_masa_pun_broj.get())
             for i in range(len(punkm)):
                 if i < broj:
                     kocne_mase.append(punkm[i])
@@ -507,13 +500,13 @@ class GUI:
 
         self.recalc_and_truncate()
 
-        tara = self.calculate_weights(8)
+        tara = self.calculate_weights(self.sheet.get_column_data(8, return_copy=True))
         if tara == "Greška!" or tara == "":
             self.tare_entry.set(tara)
         else:
             self.tare_entry.set(f'{tara:.2f}'.replace('.', ','))
 
-        neto = self.calculate_weights(9)
+        neto = self.calculate_weights(self.sheet.get_column_data(9, return_copy=True))
         if neto == "Greška!" or neto == "":
             self.neto_entry.set(neto)
         else:
@@ -524,46 +517,53 @@ class GUI:
         else:
             self.bruto_entry.set(f'{neto + tara:.2f}'.replace('.', ','))
 
-        osovine = self.calculate_weights(14)
+        osovine = self.calculate_weights(self.sheet.get_column_data(14, return_copy=True))
         if osovine == "Greška!" or osovine == "":
             self.os_entry.set(osovine)
         else:
             self.os_entry.set(f'{osovine:.0f}'.replace('.', ','))
 
-        rkm = self.calculate_weights(10)
+        rkm = self.calculate_weights(self.sheet.get_column_data(10, return_copy=True))
         if rkm == "Greška!" or rkm == "":
             self.rkm_entry.set(rkm)
         else:
             self.rkm_entry.set(f'{rkm:.0f}'.replace('.', ','))
 
-        punkm = self.calculate_weights(11)
-        if punkm == "Greška!" or punkm == "":
-            self.punkm_entry.set(punkm)
-        else:
-            self.punkm_entry.set(f'{punkm:.0f}'.replace('.', ','))
+        punkm = self.sheet.get_column_data(11)
+        prazankm = self.sheet.get_column_data(12)
+        kocne_mase = []
 
-        prazankm = self.calculate_weights(12)
-        if prazankm == "Greška!" or prazankm == "":
-            self.prazankm_entry.set(prazankm)
-        else:
-            self.prazankm_entry.set(f'{prazankm:.0f}'.replace('.', ','))
+        try:
+            if self.kocna_masa_pun_broj.get() == '':
+                broj = 0
+            else:
+                broj = int(self.kocna_masa_pun_broj.get())
+            for i in range(len(punkm)):
+                if i < broj:
+                    kocne_mase.append(punkm[i])
+                else:
+                    kocne_mase.append(prazankm[i])
+            totalkm = self.calculate_weights(kocne_mase)
+            self.ukkm_entry.set(f'{totalkm:.0f}'.replace('.', ','))
+        except ValueError:
+            self.ukkm_entry.set("Greška!")
+            return
 
-        ukduzina = self.calculate_weights(7)
+        ukduzina = self.calculate_weights(self.sheet.get_column_data(7, return_copy=True))
         if ukduzina == "Greška!" or ukduzina == "":
             self.ukduzina_entry.set(ukduzina)
         else:
             self.ukduzina_entry.set(f'{ukduzina:.0f}'.replace('.', ','))
 
-    def calculate_weights(self, column):
+    def calculate_weights(self, data):
         """ Function for calculating totals in specific columns.
 
-        :param column: Column to be calculated.
+        :param data: Column to be calculated.
         :return: Total weight.
         """
         total = 0.0
-        elements = self.sheet.get_column_data(column, return_copy=True)
 
-        for el in elements:
+        for el in data:
             if el == '' or el == 'praznina':
                 continue
             else:
