@@ -3,7 +3,7 @@
 """ Program for automating and simplifying some work for my dad. """
 
 __author__ = "Josip Sivrić"
-__version__ = "1.0"
+__version__ = "1.0.0.1"
 __email__ = "josipsivric@gmail.com"
 __status__ = "Production"
 
@@ -31,7 +31,7 @@ class GUI:
     def __init__(self, master):
         self.master = master
         master.title("Priprema za najavu")
-        master.iconbitmap("train.ico")
+        master.iconbitmap("icon/train.ico")
 
         self.style = ttk.Style()
         self.style.configure('big.TButton', font=(None, 12, 'bold'), foreground="red")
@@ -563,7 +563,8 @@ class GUI:
         else:
             self.ukduzina_entry.set(f'{ukduzina:.0f}'.replace('.', ','))
 
-    def calculate_weights(self, data):
+    @staticmethod
+    def calculate_weights(data):
         """ Function for calculating totals in specific columns.
 
         :param data: Column to be calculated.
