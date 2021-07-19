@@ -1,7 +1,7 @@
 """ Code for operating PDF and Excel files."""
 
 __author__ = "Josip Sivrić"
-__version__ = "1.1.0.1"
+__version__ = "1.1.1.0"
 __email__ = "josipsivric@gmail.com"
 __status__ = "Production"
 
@@ -26,6 +26,7 @@ def open_first_pdf(selected_pdf):
     new_table = table[2:]
     formated_table = [[""] * 18 for _ in range(len(new_table))]
     positions = [0, 1, 13, 8, 7, 10, 11, 14, 12]
+    deduplicated_table = []
     for i in range(len(new_table)):
         new_table[i][3] = new_table[i][3].replace(',', '.')
         new_table[i][4] = new_table[i][4].replace(',', '.')
@@ -34,9 +35,13 @@ def open_first_pdf(selected_pdf):
         for index, pos in enumerate(positions):
             formated_table[i][pos] = new_table[i][index]
 
+    for row in formated_table:
+        if row not in deduplicated_table:
+            deduplicated_table.append(row)
+
     pdf.close_file()
 
-    return formated_table
+    return deduplicated_table
 
 
 def write_final_excel(file_path, save_path, broj_vagona=None, otpremna_zelj_uprava=None, sifra_otpremnog_kol=None,
