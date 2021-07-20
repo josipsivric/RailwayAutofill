@@ -1,12 +1,13 @@
 """ Code for operating PDF and Excel files."""
 
 __author__ = "Josip Sivrić"
-__version__ = "1.1.2.0"
+__version__ = "1.1.3.0"
 __email__ = "josipsivric@gmail.com"
 __status__ = "Production"
 
 import pdfplumber
 import xlwings as xw
+from  itertools import chain
 
 
 def open_first_pdf(selected_pdf):
@@ -35,11 +36,9 @@ def open_first_pdf(selected_pdf):
         for index, pos in enumerate(positions):
             formated_table[i][pos] = new_table[i][index]
 
-    for row in formated_table:
-        if row not in deduplicated_table:
-            for i in range(len(deduplicated_table)):
-                if deduplicated_table[i][1] != row[1]:
-                    deduplicated_table.append(row)
+    for i in range(len(formated_table)):
+        if not formated_table[i][1] in chain(*deduplicated_table):
+            deduplicated_table.append(formated_table[i])
 
     pdf.close_file()
 
