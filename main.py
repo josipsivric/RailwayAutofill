@@ -3,7 +3,7 @@
 """ Program for automating and simplifying some work for my dad. """
 
 __author__ = "Josip Sivrić"
-__version__ = "1.0.1.0"
+__version__ = "1.1.0.0"
 __email__ = "josipsivric@gmail.com"
 __status__ = "Production"
 
@@ -32,9 +32,10 @@ class GUI:
             'pun\nKM', 'prazan\nKM', 'serija', 'broj\nosovina', 'otpremni\nkolodvor', 'uputni\nkolodvor', 'isprava']
 
     def __init__(self, master):
+
         self.master = master
         master.title("Priprema za najavu")
-        master.iconbitmap("icon/train.ico")
+        master.iconbitmap("icon/train2.ico")
 
         self.style = ttk.Style()
         self.style.configure('big.TButton', font=(None, 12, 'bold'), foreground="red")
@@ -45,6 +46,7 @@ class GUI:
         self.org_excel_file_path = tk.StringVar()
         self.new_excel_file_path = tk.StringVar()
 
+        self.uk_br_vagona_entry = tk.StringVar()
         self.tare_entry = tk.StringVar()
         self.bruto_entry = tk.StringVar()
         self.neto_entry = tk.StringVar()
@@ -179,43 +181,49 @@ class GUI:
         self.broj_punih_vagona_entry = ttk.Entry(self.calc_frame, textvariable=self.broj_punih_vagona)
         self.broj_punih_vagona_entry.grid(row=3, column=3, padx=(5, 15), pady=5, sticky="we")
 
+        # Automatically calculated
         self.podloga = tk.Frame(self.calc_frame, background=CALCULATOR_COLOR)
         self.podloga.grid(row=0, column=4, rowspan=4, columnspan=4, sticky="nsew")
 
-        self.tare_label = ttk.Label(self.calc_frame, text="Tara težina (tone):", background=CALCULATOR_COLOR)
-        self.tare_label.grid(row=0, column=4, padx=5, pady=5, sticky="e")
-        self.tare_calc = ttk.Entry(self.calc_frame, textvariable=self.tare_entry)
-        self.tare_calc.grid(row=0, column=5, pady=5, padx=(5, 15), sticky="we")
-
-        self.neto_label = ttk.Label(self.calc_frame, text="Neto težina (tone):", background=CALCULATOR_COLOR)
-        self.neto_label.grid(row=1, column=4, padx=5, pady=5, sticky="e")
-        self.neto_calc = ttk.Entry(self.calc_frame, textvariable=self.neto_entry)
-        self.neto_calc.grid(row=1, column=5, pady=5, padx=(5, 15), sticky="we")
-
-        self.bruto_label = ttk.Label(self.calc_frame, text="Bruto težina (tone):", background=CALCULATOR_COLOR)
-        self.bruto_label.grid(row=2, column=4, padx=5, pady=5, sticky="e")
-        self.bruto_calc = ttk.Entry(self.calc_frame, textvariable=self.bruto_entry)
-        self.bruto_calc.grid(row=2, column=5, pady=5, padx=(5, 15), sticky="we")
-
-        self.os_label = ttk.Label(self.calc_frame, text="Broj osovina:", background=CALCULATOR_COLOR)
-        self.os_label.grid(row=3, column=4, padx=5, pady=5, sticky="e")
-        self.os_calc = ttk.Entry(self.calc_frame, textvariable=self.os_entry)
-        self.os_calc.grid(row=3, column=5, pady=5, padx=(5, 15), sticky="we")
-
-        self.rkm_label = ttk.Label(self.calc_frame, text="Ručna KM:", background=CALCULATOR_COLOR)
-        self.rkm_label.grid(row=0, column=6, padx=5, pady=5, sticky="e")
-        self.rkm_calc = ttk.Entry(self.calc_frame, textvariable=self.rkm_entry)
-        self.rkm_calc.grid(row=0, column=7, pady=5, padx=(5, 15), sticky="we")
+        self.uk_br_vagona_label = ttk.Label(self.calc_frame, text="Ukupan broj vagona:", background=CALCULATOR_COLOR)
+        self.uk_br_vagona_label.grid(row=0, column=4, padx=5, pady=5, sticky="e")
+        self.uk_br_vagona_calc = ttk.Entry(self.calc_frame, textvariable=self.uk_br_vagona_entry)
+        self.uk_br_vagona_calc.grid(row=0, column=5, pady=5, padx=(5, 15), sticky="we")
 
         self.ukkm_label = ttk.Label(self.calc_frame, text="Ukupna KM:", background=CALCULATOR_COLOR)
-        self.ukkm_label.grid(row=1, column=6, padx=5, pady=5, sticky="e")
+        self.ukkm_label.grid(row=1, column=4, padx=5, pady=5, sticky="e")
         self.ukkm_calc = ttk.Entry(self.calc_frame, textvariable=self.ukkm_entry)
-        self.ukkm_calc.grid(row=1, column=7, pady=5, padx=(5, 15), sticky="we")
+        self.ukkm_calc.grid(row=1, column=5, pady=5, padx=(5, 15), sticky="we")
+
+        self.rkm_label = ttk.Label(self.calc_frame, text="Ručna KM:", background=CALCULATOR_COLOR)
+        self.rkm_label.grid(row=2, column=4, padx=5, pady=5, sticky="e")
+        self.rkm_calc = ttk.Entry(self.calc_frame, textvariable=self.rkm_entry)
+        self.rkm_calc.grid(row=2, column=5, pady=5, padx=(5, 15), sticky="we")
+
+        self.tare_label = ttk.Label(self.calc_frame, text="Tara težina (tone):", background=CALCULATOR_COLOR)
+        self.tare_label.grid(row=3, column=4, padx=5, pady=5, sticky="e")
+        self.tare_calc = ttk.Entry(self.calc_frame, textvariable=self.tare_entry)
+        self.tare_calc.grid(row=3, column=5, pady=5, padx=(5, 15), sticky="we")
+
+        self.bruto_label = ttk.Label(self.calc_frame, text="Bruto težina (tone):", background=CALCULATOR_COLOR)
+        self.bruto_label.grid(row=0, column=6, padx=5, pady=5, sticky="e")
+        self.bruto_calc = ttk.Entry(self.calc_frame, textvariable=self.bruto_entry)
+        self.bruto_calc.grid(row=0, column=7, pady=5, padx=(5, 15), sticky="we")
+
+        self.neto_label = ttk.Label(self.calc_frame, text="Neto težina (tone):", background=CALCULATOR_COLOR)
+        self.neto_label.grid(row=1, column=6, padx=5, pady=5, sticky="e")
+        self.neto_calc = ttk.Entry(self.calc_frame, textvariable=self.neto_entry)
+        self.neto_calc.grid(row=1, column=7, pady=5, padx=(5, 15), sticky="we")
 
         self.ukduzina_label = ttk.Label(self.calc_frame, text="Ukupna dužina:", background=CALCULATOR_COLOR)
         self.ukduzina_label.grid(row=2, column=6, padx=5, pady=5, sticky="e")
         self.ukduzina_calc = ttk.Entry(self.calc_frame, textvariable=self.ukduzina_entry)
         self.ukduzina_calc.grid(row=2, column=7, pady=5, padx=(5, 15), sticky="we")
+
+        self.os_label = ttk.Label(self.calc_frame, text="Broj osovina:", background=CALCULATOR_COLOR)
+        self.os_label.grid(row=3, column=6, padx=5, pady=5, sticky="e")
+        self.os_calc = ttk.Entry(self.calc_frame, textvariable=self.os_entry)
+        self.os_calc.grid(row=3, column=7, pady=5, padx=(5, 15), sticky="we")
 
         self.calc_btn = ttk.Button(self.calc_frame, text="Izračunaj i pripremi", command=self.calculate_weights_btn)
         self.calc_btn.grid(row=4, column=4, columnspan=4, pady=5, padx=5, sticky="nsew")
@@ -267,6 +275,7 @@ class GUI:
         self.ukduzina_entry.set("")
         self.rkm_entry.set("")
         self.ukkm_entry.set("")
+        self.uk_br_vagona_entry.set("")
 
         self.otpremna_zelj_uprava.set("")
         self.sifra_otpremnog_kol.set("")
@@ -519,6 +528,8 @@ class GUI:
         """
 
         self.recalc_and_truncate()
+
+        self.uk_br_vagona_entry.set(self.sheet.get_total_rows())
 
         tara = self.calculate_weights(self.sheet.get_column_data(8, return_copy=True))
         if tara == "Greška!" or tara == "":
