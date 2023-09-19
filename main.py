@@ -441,7 +441,7 @@ class GUI:
         neto = []
         for i in range(len(stupac_neto)):
             if stupac_neto[i] == '':
-                neto.append('praznina')
+                neto.append('0')
             else:
                 neto.append(stupac_neto[i])
 
